@@ -1,0 +1,13 @@
+{
+	"name": "infrajs/env",
+	"homepage":"https://github.com/infrajs/env",
+	"license": "GPL3",
+	"autoload": {
+		"psr-4": { "infrajs\\env\\": "" }
+	},
+	"require":{
+		"infrajs/mark":"~1",
+		"infrajs/view":"~1",
+		"infrajs/ans":"~1"
+	}
+}
