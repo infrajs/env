@@ -41,7 +41,8 @@ class Env {
 		$mark = static::mark();
 		$data = $mark->getData();
 		if(!$prop) return $data;
-		return Sequence::get($data,array($prop));
+		$right = array($prop);
+		return Sequence::get($data,$right);
 	}
 	public static function getName()
 	{
