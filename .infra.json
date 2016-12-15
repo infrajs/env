@@ -1,0 +1,4 @@
+{
+	"update":"update.php",
+	"require":"infra.php"
+}

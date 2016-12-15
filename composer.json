@@ -8,6 +8,10 @@
 	"require":{
 		"infrajs/mark":"~1",
 		"infrajs/view":"~1",
-		"infrajs/ans":"~1"
+		"infrajs/ans":"~1",
+		"infrajs/nostore":"~1",
+		"infrajs/path":"~1",
+		"infrajs/load":"~1",
+		"infrajs/event":"~1"
 	}
 }

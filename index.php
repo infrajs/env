@@ -2,11 +2,16 @@
 use infrajs\view\View;
 use infrajs\ans\Ans;
 use infrajs\mark\Mark;
+use infrajs\env\Env;
+use infrajs\nostore\Nostore;
+use infrajs\path\Path;
 
-$name = View::getCookie('-env');
-$mark = new Mark('~.env/','mark');
+Nostore::on();
+
+Env::init();
+
 $ans = array();
-if ($mark->name != $name) return Ans::err($ans, 'Запрос устарел, уже установлено новое окружение');
-$ans['env'] = $mark->get();
+$ans['env'] = Env::get();
+$ans['name'] = Env::getName();
 
 return Ans::ret($ans);
