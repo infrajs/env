@@ -12,6 +12,8 @@
 		"infrajs/nostore":"~1",
 		"infrajs/path":"~1",
 		"infrajs/load":"~1",
+		"infrajs/once":"~1",
+		"infrajs/template":"~1",
 		"infrajs/event":"~1"
 	}
 }

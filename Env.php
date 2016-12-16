@@ -9,21 +9,21 @@ use infrajs\sequence\Sequence;
 
 class Env {
 	public static $defined = false;
+	public static $list = array();
+	public static function add($name, $fndef, $fncheck)
+	{
+		Env::$list[$name] = array('fndef' => $fndef, 'fncheck' => $fncheck);
+	}
 	public static function mark()
 	{
 		return Once::exec(__FILE__, function () {
 			$mark = new Mark('~.env/');
-			$mark->add('region', function () {
-				return 'samara';
-			}, function ($newval) {
-				return in_array($newval, array('togliatti','samara'));
-			});
+			foreach (Env::$list as $name => $v) {
+				$mark->add($name, $v['fndef'], $v['fncheck']);
+			}
 			$origname = Ans::GET('-env');
 			if (!$origname) $origname = View::getCookie('-env');
-			
-
 			$mark->setVal($origname);
-
 			if ($origname) {
 				static::$defined = true;
 				$name = $mark->getVal();
@@ -50,3 +50,11 @@ class Env {
 		return $mark->getVal();		
 	}
 }
+/*
+Пример
+Env::add('region', function () {
+	return 'samara';
+}, function ($newval) {
+	return in_array($newval, array('togliatti','samara','syzran'));
+});
+*/
