@@ -14,6 +14,10 @@ class Env {
 	{
 		Env::$list[$name] = array('fndef' => $fndef, 'fncheck' => $fncheck);
 	}
+	public static function is()
+	{
+		return static::$defined;
+	}
 	public static function mark()
 	{
 		return Once::exec(__FILE__, function () {
@@ -22,12 +26,14 @@ class Env {
 				$mark->add($name, $v['fndef'], $v['fncheck']);
 			}
 			$origname = Ans::GET('-env');
-			if (!$origname) $origname = View::getCookie('-env');
+			if (is_null($origname)) $origname = View::getCookie('-env');
 			$mark->setVal($origname);
 			if ($origname) {
 				static::$defined = true;
 				$name = $mark->getVal();
 				View::setCookie('-env', $name);
+			} else if (!is_null($origname)) {
+				View::setCookie('-env'); //Куки выставлять не обязательно
 			}
 			return $mark;
 		});

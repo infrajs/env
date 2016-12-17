@@ -8,7 +8,16 @@ use infrajs\template\Template;
 use infrajs\nostore\Nostore;
 
 Event::handler('Controller.oninit', function (&$layer) {
-	Template::$scope['~env'] = Env::get();
+	Template::$scope['Env'] = array();
+	Template::$scope['Env']['get'] = function ($name = false) {
+		return Env::get($name);
+	};
+	Template::$scope['Env']['getName'] = function () {
+		return Env::getName();
+	};
+	Template::$scope['Env']['is'] = function () {
+		return Env::is();
+	};
 });
 
 Event::handler('Layer.onshow', function (&$layer) {
