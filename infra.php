@@ -12,8 +12,8 @@ Event::handler('Controller.oninit', function (&$layer) {
 	Template::$scope['Env']['get'] = function ($name = false) {
 		return Env::get($name);
 	};
-	Template::$scope['Env']['getName'] = function () {
-		return Env::getName();
+	Template::$scope['Env']['name'] = function () {
+		return Env::name();
 	};
 	Template::$scope['Env']['is'] = function () {
 		return Env::is();
@@ -25,7 +25,7 @@ Event::handler('Layer.onshow', function (&$layer) {
 	Once::exec(__FILE__, function () {
 		$data = Env::get();
 		$data = Load::json_encode($data);
-		$html = '<script>window.ENVcontent="'.Env::getName().'";window.ENVdata='.$data.';';
+		$html = '<script>window.ENVcontent="'.Env::name().'";window.ENVdata='.$data.';';
 		$html .= Load::loadTEXT('-env/check.js');
 		$html .= '</script>';
 		View::head($html, true);	

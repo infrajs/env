@@ -1,7 +1,7 @@
 
 window.Env = {};
  
-Env.getName = function () {
+Env.name = function () {
 	Env.refresh();
 	return window.ENVcontent;
 };

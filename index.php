@@ -13,7 +13,7 @@ Env::init();
 
 $ans = array();
 $ans['env'] = Env::get();
-$ans['name'] = Env::getName();
+$ans['name'] = Env::name();
 $ans['get'] = $_GET['-env'];
 
 return Ans::ret($ans);

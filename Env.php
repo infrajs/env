@@ -50,7 +50,7 @@ class Env {
 		$right = array($prop);
 		return Sequence::get($data,$right);
 	}
-	public static function getName()
+	public static function name()
 	{
 		$mark = static::mark();
 		return $mark->getVal();		
