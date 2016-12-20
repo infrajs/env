@@ -1,4 +1,5 @@
 <?php
 use infrajs\path\Path;
 
-Path::mkdir('~.env/');
+Path::mkdir('~auto/');
+Path::mkdir('~auto/.env/');

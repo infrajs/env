@@ -8,19 +8,17 @@ Env.name = function () {
 Env.is = function () {
 	var env = document.cookie.match('(^|;)?\-env=([^;]*)(;|$)');	
 	if (env) env = env[2];
-	return !!env;
+	return env;
 };
 Env.refresh = function () {
-	if (!Crumb.get) return; 
-	var val = Crumb.get['-env'];
-	if (typeof(val) == 'undefined') return;
-	if (Env.data.get == val) return;
-
-	if (val) {
-		var src = '-env/?-env='+val;
-	} else {
-		var src = '-env/?-env=';
+	var val = Env.is();
+	if (Crumb.get && (Crumb.get['-env'] || Crumb.get['-env'] == '')) {
+		val = Crumb.get['-env'];
 	}
+	if (!val) val = '';
+
+	if (Env.data.get == val) return;
+	var src = '-env/?-env='+val;
 	Load.unload(src);
 	var data = Load.loadJSON(src);
 	Env.data = data;

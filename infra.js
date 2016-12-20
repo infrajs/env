@@ -1,5 +1,4 @@
 ( function () {
-	var first = true;
 
 	Template.scope['Env'] = {};
 	Template.scope['Env']['get'] = function (name) { return Env.get(name) };

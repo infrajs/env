@@ -6,6 +6,7 @@ use infrajs\load\Load;
 use infrajs\once\Once;
 use infrajs\template\Template;
 use infrajs\nostore\Nostore;
+use infrajs\controller\Layer;
 
 Event::handler('Controller.oninit', function (&$layer) {
 	Template::$scope['Env'] = array();
@@ -18,6 +19,10 @@ Event::handler('Controller.oninit', function (&$layer) {
 	Template::$scope['Env']['is'] = function () {
 		return Env::is();
 	};
+	Layer::parsedAdd( function ($layer) {
+		if (empty($layer['data'])&&empty($layer['json'])) return '';
+		return Env::name().(Env::is()?'1':'0');
+	});
 });
 
 Event::handler('Layer.onshow', function (&$layer) {

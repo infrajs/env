@@ -5,6 +5,8 @@ use infrajs\mark\Mark;
 use infrajs\ans\Ans;
 use infrajs\once\Once;
 use infrajs\view\View;
+use infrajs\nostore\Nostore;
+use infrajs\router\Router;
 use infrajs\sequence\Sequence;
 
 class Env {
@@ -16,15 +18,20 @@ class Env {
 	}
 	public static function is()
 	{
+		$mark = static::mark();
 		return static::$defined;
 	}
 	public static function mark()
 	{
-		return Once::exec(__FILE__, function () {
-			$mark = new Mark('~.env/');
+		$mark = &Once::exec(__FILE__, function () {
+			if (!Router::$main) Nostore::on(); //Нельзя обращаться к окружению в независимых скриптах);
+			$mark = new Mark('~auto/.env/');
 			foreach (Env::$list as $name => $v) {
 				$mark->add($name, $v['fndef'], $v['fncheck']);
 			}
+			return $mark;
+		});
+		Once::exec(__FILE__."init", function () use (&$mark) { //Здесь может повторно вызываться mark по этому вынесено отедльно
 			$origname = Ans::GET('-env');
 			if (is_null($origname)) $origname = View::getCookie('-env');
 			$mark->setVal($origname);
@@ -35,12 +42,8 @@ class Env {
 			} else if (!is_null($origname)) {
 				View::setCookie('-env'); //Куки выставлять не обязательно
 			}
-			return $mark;
 		});
-	}
-	public static function init()
-	{	
-		$mark = static::mark();
+		return $mark;
 	}
 	public static function get($prop = '')
 	{
@@ -48,7 +51,7 @@ class Env {
 		$data = $mark->getData();
 		if(!$prop) return $data;
 		$right = array($prop);
-		return Sequence::get($data,$right);
+		return Sequence::get($data, $right);
 	}
 	public static function name()
 	{
