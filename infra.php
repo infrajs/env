@@ -5,6 +5,7 @@ use infrajs\env\Env;
 use infrajs\load\Load;
 use infrajs\once\Once;
 use infrajs\template\Template;
+use MatthiasMullie\Minify;
 use infrajs\nostore\Nostore;
 use infrajs\controller\Layer;
 
@@ -30,9 +31,13 @@ Event::handler('Layer.onshow', function (&$layer) {
 	Once::exec(__FILE__, function () {
 		$data = Env::get();
 		$data = Load::json_encode($data);
-		$html = '<script>window.ENVcontent="'.Env::name().'";window.ENVdata='.$data.';';
-		$html .= Load::loadTEXT('-env/check.js');
+		$html = '<script>';
+		$code = 'window.ENVcontent="'.Env::name().'";window.ENVdata='.$data.';';
+		$code .= Load::loadTEXT('-env/check.js');
+		$min = new Minify\JS($code);
+		$code = $min->minify();
+		$html .= $code;
 		$html .= '</script>';
 		View::head($html, true);	
 	});
-});
+},'ENV:tpl');

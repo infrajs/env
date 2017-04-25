@@ -6,6 +6,7 @@
 		"psr-4": { "infrajs\\env\\": "" }
 	},
 	"require":{
+		"matthiasmullie/minify":"~1",
 		"infrajs/mark":"~1",
 		"infrajs/view":"~1",
 		"infrajs/ans":"~1",
