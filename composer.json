@@ -1,7 +1,6 @@
 {
 	"name": "infrajs/env",
 	"homepage":"https://github.com/infrajs/env",
-	"license": "GPL3",
 	"autoload": {
 		"psr-4": { "infrajs\\env\\": "" }
 	},
