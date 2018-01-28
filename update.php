@@ -1,5 +1,7 @@
 <?php
 use infrajs\path\Path;
 
-Path::mkdir('~auto/');
-Path::mkdir('~auto/.env/');
+if (Path::theme(Path::$conf['data'])) {
+	Path::mkdir(Path::$conf['auto']);
+	Path::mkdir(Path::$conf['auto'].'.env/');
+}
