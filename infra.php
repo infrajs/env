@@ -28,7 +28,7 @@ Event::handler('Controller.oninit', function (&$layer) {
 
 Event::handler('Layer.onshow', function (&$layer) {
 	if (empty($layer['environment'])) return;
-	Once::exec(__FILE__, function () {
+	Once::func( function () {
 		$data = Env::get();
 		$data = Load::json_encode($data);
 		$html = '<script>';

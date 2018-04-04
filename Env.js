@@ -16,7 +16,7 @@ Env.refresh = function () {
 		val = Crumb.get['-env'];
 	}
 	if (!val) val = '';
-
+	if (!window.ENVdata) window.ENVdata = {};
 	if (Env.data.get == val) return;
 	var src = '-env/?-env='+val;
 	Load.unload(src);
