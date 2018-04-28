@@ -23,7 +23,7 @@ class Env {
 	}
 	public static function mark()
 	{
-		$mark = &Once::exec(__FILE__, function () {
+		$mark = Once::func( function () {
 			if (!Router::$main) Nostore::on(); //Нельзя обращаться к окружению в независимых скриптах);
 			$mark = new Mark('~auto/.env/');
 			foreach (Env::$list as $name => $v) {
@@ -31,7 +31,7 @@ class Env {
 			}
 			return $mark;
 		});
-		Once::exec(__FILE__."init", function () use (&$mark) { //Здесь может повторно вызываться mark по этому вынесено отедльно
+		Once::func(function () use (&$mark) { //Здесь может повторно вызываться mark по этому вынесено отедльно
 			$origname = Ans::GET('-env');
 			if (is_null($origname)) $origname = View::getCookie('-env');
 			$mark->setVal($origname);
