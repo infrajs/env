@@ -20,10 +20,10 @@ Event::handler('Controller.oninit', function (&$layer) {
 	Template::$scope['Env']['is'] = function () {
 		return Env::is();
 	};
-	Layer::parsedAdd( function ($layer) {
+	/*Layer::parsedAdd( function ($layer) {
 		if (empty($layer['data'])&&empty($layer['json'])) return '';
 		return Env::name().(Env::is()?'1':'0');
-	});
+	});*/
 });
 
 Event::handler('Layer.onshow', function (&$layer) {
