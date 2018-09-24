@@ -16,7 +16,6 @@ Env.refresh = function () {
 		val = Crumb.get['-env'];
 	}
 	if (!val) val = '';
-	if (!window.ENVdata) window.ENVdata = {};
 	if (Env.data.get == val) return;
 	var src = '-env/?-env='+val;
 	Load.unload(src);
@@ -34,8 +33,9 @@ Env.init = function () {
 	Env.data = {};
 	var env = location.search.match('[\?|&]\-env=([^&]+)');
 	if (env) env = env[1];
-	if (env) Env.data.get = Env;
+	if (env) Env.data.get = env;
 	else Env.data.get = '';
+	if(!window.ENVdata) window.ENVdata = {};
 	Env.data.env = window.ENVdata;
 	Env.data.name = window.ENVcontent;
 }
