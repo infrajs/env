@@ -1,15 +1,17 @@
 
-window.Env = {};
- 
+import { Crumb } from '/vendor/infrajs/controller/src/Crumb.js'
+
+let Env = {}
+
 Env.name = function () {
-	Env.refresh();
-	return window.ENVcontent;
-};
+	Env.refresh()
+	return window.ENVcontent
+}
 Env.is = function () {
-	var env = document.cookie.match('(^|;)?\-env=([^;]*)(;|$)');	
-	if (env) env = env[2];
-	return env;
-};
+	var env = document.cookie.match('(^|;)?\-env=([^;]*)(;|$)')
+	if (env) env = env[2]
+	return env
+}
 Env.refresh = function () {
 	var val = Env.is();
 	if (Crumb.get && (Crumb.get['-env'] || Crumb.get['-env'] == '')) {
@@ -17,13 +19,13 @@ Env.refresh = function () {
 	}
 	if (!val) val = '';
 	if (Env.data.get == val) return;
-	var src = '-env/?-env='+val;
+	var src = '-env/?-env=' + val;
 	Load.unload(src);
 	var data = Load.loadJSON(src);
 	Env.data = data;
 	window.ENVdata = data.env;
 	window.ENVcontent = data.name;
-},
+}
 Env.get = function (name) {
 	Env.refresh();
 	if (!name) return window.ENVdata;
@@ -35,8 +37,11 @@ Env.init = function () {
 	if (env) env = env[1];
 	if (env) Env.data.get = env;
 	else Env.data.get = '';
-	if(!window.ENVdata) window.ENVdata = {};
+	if (!window.ENVdata) window.ENVdata = {};
 	Env.data.env = window.ENVdata;
 	Env.data.name = window.ENVcontent;
 }
 Env.init();
+
+window.Env = Env
+export { Env }

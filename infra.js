@@ -1,17 +1,17 @@
-( function () {
+import { Env } from "/vendor/infrajs/env/Env.js"
+import { Template } from '/vendor/infrajs/template/Template.js'
 
-	Template.scope['Env'] = {};
-	Template.scope['Env']['get'] = function (name) { return Env.get(name) };
-	Template.scope['Env']['name'] = function () { return Env.name(); };
-	Template.scope['Env']['is'] = function () { return Env.is(); };
-	
-	/*Controller.parsedAdd(function(layer){
-		//Можно получить список вызываемых в шаблоне функций и точней определить зависит слой или нет от окружения
-		//Но есть ещё другие расширения Region Lang
+Template.scope['Env'] = {};
+Template.scope['Env']['get'] = function (name) { return Env.get(name) };
+Template.scope['Env']['name'] = function () { return Env.name(); };
+Template.scope['Env']['is'] = function () { return Env.is(); };
+
+/*Controller.parsedAdd(function(layer){
+	//Можно получить список вызываемых в шаблоне функций и точней определить зависит слой или нет от окружения
+	//Но есть ещё другие расширения Region Lang
 
 
-		if (!layer.data&&!layer.json) return '';
-		//Если установили значение вручную такое же как определено автоматически. 
-		return Env.name()+(Env.is()?'1':'0');
-	});*/
-})();
+	if (!layer.data&&!layer.json) return '';
+	//Если установили значение вручную такое же как определено автоматически.
+	return Env.name()+(Env.is()?'1':'0');
+});*/
