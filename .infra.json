@@ -1,6 +1,6 @@
 {
 	"update":"update.php",
 	"require":"infra.php",
-	"js":["Env.js","infra.js"],
+	"js":["infra.js"],
 	"dependencies":["event","controller","template"]
 }
