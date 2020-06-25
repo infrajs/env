@@ -7,7 +7,10 @@ use infrajs\nostore\Nostore;
 use infrajs\path\Path;
 use infrajs\config\Config;
 
-Config::get();
+
+Config::get(); 
+//если расширение определяет параметр env, то оно должно быть загружено до и становится зависимостью для Env
+//Получается что Env не знает от чего он зависит
 $ans = array();
 $ans['env'] = Env::get();
 $ans['name'] = Env::name();
