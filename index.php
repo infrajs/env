@@ -11,10 +11,13 @@ use infrajs\config\Config;
 Config::get(); 
 //если расширение определяет параметр env, то оно должно быть загружено до и становится зависимостью для Env
 //Получается что Env не знает от чего он зависит и ему нужно загрузить всё. 
-//Иначе нужен механизм подстановки зависимости для env.
+
+Env::init(); //Считали GET или COOKIE
+
 $ans = array();
-$ans['env'] = Env::get();
+$ans['env'] = Env::get(); //Обращение к окружениею без контроллера отменяет public кэш
 $ans['name'] = Env::name();
+$ans['defined'] = Env::$defined;
 $ans['get'] = Ans::GET('-env');
 
 return Ans::ret($ans);

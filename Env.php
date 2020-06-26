@@ -11,6 +11,7 @@ use infrajs\sequence\Sequence;
 
 class Env {
 	public static $defined = false;
+	public static $mark = false; //Определяется в Env::init() - нужно выполнять на сервере если требуется работа с окружением
 	public static $list = array();
 	public static function add($name, $fndef, $fncheck)
 	{
@@ -18,45 +19,41 @@ class Env {
 	}
 	public static function is()
 	{
-		$mark = static::mark();
 		return static::$defined;
 	}
-	public static function mark()
+	public static function init()
 	{
-		$mark = Once::func( function () {
-			if (!Router::$main) Nostore::on(); //Нельзя обращаться к окружению в независимых скриптах);
-			$mark = new Mark('~auto/.env/');
-			foreach (Env::$list as $name => $v) {
-				$mark->add($name, $v['fndef'], $v['fncheck']);
-			}
-			return $mark;
-		});
-		Once::func(function () use (&$mark) { //Здесь может повторно вызываться mark по этому вынесено отедльно
-			$origname = Ans::GET('-env');
-			if (is_null($origname)) $origname = View::getCookie('-env');
-			$mark->setVal($origname);
-			if ($origname) {
-				static::$defined = true;
-				$name = $mark->getVal();
-				View::setCookie('-env', $name);
-			} else if (!is_null($origname)) {
-				View::setCookie('-env'); //Куки выставлять не обязательно
-			}
-		});
-		return $mark;
+		if (Env::$mark) return;
+
+		if (!Router::$main) Nostore::on(); //Нельзя обращаться к окружению в независимых скриптах у которых нет редиректа для public кэша
+
+		$mark = new Mark('~auto/.env/');
+		foreach (Env::$list as $name => $v) {
+			$mark->add($name, $v['fndef'], $v['fncheck']);
+		}
+	
+		$origname = Ans::GET('-env');
+		if (is_null($origname)) $origname = View::getCookie('-env');
+		$mark->setVal($origname);
+		if ($origname) {
+			static::$defined = true;
+			$name = $mark->getVal();
+			View::setCookie('-env', $name);
+		} else if (!is_null($origname)) {
+			View::setCookie('-env'); //Куки выставлять не обязательно
+		}
+		Env::$mark = $mark;
 	}
 	public static function get($prop = '')
 	{
-		$mark = static::mark();
-		$data = $mark->getData();
+		$data = Env::$mark->getData();
 		if(!$prop) return $data;
 		$right = array($prop);
 		return Sequence::get($data, $right);
 	}
 	public static function name()
 	{
-		$mark = static::mark();
-		return $mark->getVal();		
+		return Env::$mark->getVal();		
 	}
 }
 /*
