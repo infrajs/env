@@ -1,47 +1,61 @@
 
-import { Crumb } from '/vendor/infrajs/controller/src/Crumb.js'
 
 let Env = {}
 
-Env.name = function () {
-	Env.refresh()
-	return window.ENVcontent
-}
-Env.is = function () {
+Env.fromCookie = () => {
 	var env = document.cookie.match('(^|;)?\-env=([^;]*)(;|$)')
-	if (env) env = env[2]
+	if (env) env = decodeURIComponent(env[2])
 	return env
 }
-Env.refresh = function () {
-	var val = Env.is();
-	if (Crumb.get && (Crumb.get['-env'] || Crumb.get['-env'] == '')) {
-		val = Crumb.get['-env'];
+Env.fromGET = () => {
+	let r = location.search.match('[\?|&]\-env=([^&]+)');
+	if (r) return r[1];
+}
+
+Env.check = env => {
+	if (!env) env = {}
+	Env.data = env.data || {}
+	Env.name = env.name || ''
+	
+	let getname = Env.fromGET()
+	if (getname) { //Если env установлен в адресе, то готово. Кэш такого адреса всегда по правильному окружению.
+		document.cookie = "-env=" + encodeURIComponent(getname) + "; path=/";
+		return
 	}
-	if (!val) val = '';
-	if (Env.data.get == val) return;
-	var src = '-env/?-env=' + val;
-	Load.unload(src);
-	var data = Load.loadJSON(src);
-	Env.data = data;
-	window.ENVdata = data.env;
-	window.ENVcontent = data.name;
+	let cookiename = Env.fromCookie()
+	if (!cookiename) return; //Если нет cookie то подходит любой
+	if (Env.name == cookiename) return;
+	//В cookie уже новый name - надо редиректить 
+	//При редиректе сервер проверит имя и скорректирует его если требуется в Env.init()
+	
+	if (location.search) { 
+		location.replace(location.search + '&-env=' + cookiename)
+	} else {
+		location.replace('?-env=' + cookiename)
+	}
 }
-Env.get = function (name) {
-	Env.refresh();
-	if (!name) return window.ENVdata;
-	return window.ENVdata[name];
+
+Env.get = prop => {
+	if (!prop) return Env.data
+	return Env.data[prop]
 }
-Env.init = function () {
-	Env.data = {};
-	var env = location.search.match('[\?|&]\-env=([^&]+)');
-	if (env) env = env[1];
-	if (env) Env.data.get = env;
-	else Env.data.get = '';
-	if (!window.ENVdata) window.ENVdata = {};
-	Env.data.env = window.ENVdata;
-	Env.data.name = window.ENVcontent;
+Env.getName = prop => {
+	return Env.name
 }
-Env.init();
+
+
+Env.localName = () => {
+	let name = Env.fromGET()
+	if (!name) name = Env.fromCookie()
+	if (!name) name = ''
+	return name
+}
+Env.refresh = async () => {
+	let name = Env.localName()
+	let json = (await import('/-env/?-env=' + name)).default || {}
+	Env.data = json.data || {}
+	Env.name = json.name || ''
+}
 
 window.Env = Env
 export { Env }

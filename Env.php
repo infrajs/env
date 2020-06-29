@@ -1,66 +1,88 @@
 <?php
+
 namespace infrajs\env;
 
-use infrajs\mark\Mark;
+use infrajs\mark\BuildData;
 use infrajs\ans\Ans;
-use infrajs\once\Once;
 use infrajs\view\View;
 use infrajs\nostore\Nostore;
-use infrajs\router\Router;
+//use infrajs\router\Router;
 use infrajs\sequence\Sequence;
 
-class Env {
+
+
+class Env
+{
 	public static $defined = false;
-	public static $mark = false; //Определяется в Env::init() - нужно выполнять на сервере если требуется работа с окружением
-	public static $list = array();
+	public static $name = null;
+	public static $data = null;
+	public static $props = array();
+	public static function json()
+	{
+		$ar = array(
+			'name'=> Env::$name,
+			'data'=> Env::$data
+		);
+		return json_encode($ar);
+	}
 	public static function add($name, $fndef, $fncheck)
 	{
-		Env::$list[$name] = array('fndef' => $fndef, 'fncheck' => $fncheck);
+		Env::$props[$name] = array('fndef' => $fndef, 'fncheck' => $fncheck);
 	}
 	public static function is()
 	{
 		return static::$defined;
 	}
-	public static function init()
+	public static function localName() 
 	{
-		if (Env::$mark) return;
-
-		if (!Router::$main) Nostore::on(); //Нельзя обращаться к окружению в независимых скриптах у которых нет редиректа для public кэша
-
-		$mark = new Mark('~auto/.env/');
-		foreach (Env::$list as $name => $v) {
-			$mark->add($name, $v['fndef'], $v['fncheck']);
-		}
-	
 		$origname = Ans::GET('-env');
 		if (is_null($origname)) $origname = View::getCookie('-env');
-		$mark->setVal($origname);
-		if ($origname) {
-			static::$defined = true;
-			$name = $mark->getVal();
-			View::setCookie('-env', $name);
-		} else if (!is_null($origname)) {
+		return $origname;
+	}
+	public static function init() //Запускается только один раз
+	{
+
+		//if (!Router::$main) Nostore::on(); 
+		//Нельзя обращаться к окружению в независимых скриптах у которых нет редиректа для public кэша
+
+		$origname = Env::localName();
+
+		$res = BuildData::init(Env::$props, $origname);
+		$data = $res['data'];
+		$name = $res['name'];
+
+		Env::$name = $name;
+		if (Env::$name) {
+			Env::$defined = true;
+			View::setCookie('-env', Env::$name);
+		} else {
 			View::setCookie('-env'); //Куки выставлять не обязательно
 		}
-		Env::$mark = $mark;
+		Env::$data = $data;
 	}
 	public static function get($prop = '')
 	{
-		$data = Env::$mark->getData();
-		if(!$prop) return $data;
+		$data = Env::$data;
+		if (!$prop) return $data;
 		$right = array($prop);
 		return Sequence::get($data, $right);
 	}
-	public static function name()
+	public static function getName()
 	{
-		return Env::$mark->getVal();		
+		return Env::$name;
 	}
 }
+Env::add('nostore', function () {
+	return '';
+}, function ($newval) {
+	return in_array($newval, array('1'));
+});
+
 /*
 Пример
-Env::add('region', function () {
+Env::add('region', function fndef () {
 	return 'samara';
-}, function ($newval) {
+}, function fncheck ($newval) {
 	return in_array($newval, array('togliatti','samara','syzran'));
 });
 */
