@@ -9,7 +9,7 @@ Env.fromCookie = () => {
 }
 Env.fromGET = () => {
 	let r = location.search.match('[\?|&]\-env=([^&]+)');
-	if (r) return r[1];
+	if (r) return decodeURIComponent(r[1]);
 }
 
 Env.check = env => {
@@ -52,6 +52,7 @@ Env.localName = () => {
 }
 Env.refresh = async () => {
 	let name = Env.localName()
+	if (Env.name == name) return //Ничего не поменялось или запрос вернёт тот же результат из кэша
 	let json = (await import('/-env/?-env=' + name)).default || {}
 	Env.data = json.data || {}
 	Env.name = json.name || ''

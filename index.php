@@ -23,6 +23,6 @@ $ans['defined'] = Env::$defined;
 $ans['GET'] = Ans::GET('-env');
 $ans['cookie'] = View::getCOOKIE('-env');
 
-header('Content-type: application/javascript');
+header('Content-type: application/javascript; charset=utf-8');
 echo 'export default ';
 echo json_encode($ans, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);

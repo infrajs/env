@@ -48,6 +48,7 @@ class Env
 		$origname = Env::localName();
 
 		$res = BuildData::init(Env::$props, $origname);
+		
 		$data = $res['data'];
 		$name = $res['name'];
 
