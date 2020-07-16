@@ -5,11 +5,12 @@ let Env = {}
 Env.fromCookie = () => {
 	var env = document.cookie.match('(^|;)?\-env=([^;]*)(;|$)')
 	if (env) env = decodeURIComponent(env[2])
+	if (env == 'deleted') env = ''
 	return env
 }
 Env.fromGET = () => {
-	let r = location.search.match('[\?|&]\-env=([^&]+)');
-	if (r) return decodeURIComponent(r[1]);
+	let r = location.search.match('[\?|&]\-env=([^&]+)')
+	if (r) return decodeURIComponent(r[1])
 }
 
 Env.check = env => {
