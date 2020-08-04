@@ -41,7 +41,6 @@ class Env
 	}
 	public static function init() //Запускается только один раз
 	{
-
 		//if (!Router::$main) Nostore::on(); 
 		//Нельзя обращаться к окружению в независимых скриптах у которых нет редиректа для public кэша
 
@@ -63,6 +62,16 @@ class Env
 	}
 	public static function get($prop = '')
 	{
+		if (is_null(Env::$data)) {
+			$r = false;
+			if (isset($_GET[$prop])) $val = (string) $_GET[$prop];
+			else $val = '';
+			if (Env::$props[$prop]) {
+				if ($val !== '') $r = Env::$props[$prop]['fncheck']($val);
+				if (!$r) $val = Env::$props[$prop]['fndef']();
+			}
+			return $val;
+		}
 		$data = Env::$data;
 		if (!$prop) return $data;
 		$right = array($prop);
