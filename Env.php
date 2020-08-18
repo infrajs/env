@@ -82,11 +82,11 @@ class Env
 		return Env::$name;
 	}
 }
-Env::add('nostore', function () {
-	return '';
-}, function ($newval) {
-	return in_array($newval, array('1'));
-});
+// Env::add('nostore', function () {
+// 	return '';
+// }, function ($newval) {
+// 	return in_array($newval, array('1'));
+// });
 
 /*
 Пример
