@@ -1,6 +1,7 @@
 
+import { Fire } from '/vendor/akiyatkin/load/Fire.js'
 
-let Env = {}
+let Env = {...Fire }
 
 Env.fromCookie = () => {
 	var env = document.cookie.match('(^|;)?\-env=([^;]*)(;|$)')
@@ -55,9 +56,14 @@ Env.refresh = async () => {
 	let name = Env.localName()
 	if (Env.name == name) return //Ничего не поменялось или запрос вернёт тот же результат из кэша
 	let json = (await import('/-env/?-env=' + name)).default || {}
+	if (Env.name == json.name) return //Ничего не поменялось
 	Env.data = json.data || {}
 	Env.name = json.name || ''
+	
+	await Env.emit('change')
 }
+
+//Env.after('change', () => DOM.puff('check'))
 
 window.Env = Env
 export { Env }
