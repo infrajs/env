@@ -6,7 +6,6 @@ use infrajs\load\Load;
 use infrajs\once\Once;
 use infrajs\template\Template;
 use infrajs\controller\Controller;
-use MatthiasMullie\Minify;
 use infrajs\nostore\Nostore;
 use infrajs\router\Router;
 use infrajs\controller\Layer;
@@ -21,24 +20,4 @@ Event::handler('Controller.oninit', function (&$layer) {
 	Template::$scope['Env']['getName'] = function () {
 		return Env::getName();
 	};
-	/*Layer::parsedAdd( function ($layer) {
-		if (empty($layer['data'])&&empty($layer['json'])) return '';
-		return Env::name().(Env::is()?'1':'0');
-	});*/
 });
-
-// Event::handler('Layer.onshow', function (&$layer) {
-// 	if (empty($layer['environment'])) return;
-// 	Once::func( function () {
-// 		$data = Env::getProp();
-// 		$data = Load::json_encode($data);
-// 		$html = '<script>';
-// 		$code = 'window.ENVcontent="'.Env::name().'";window.ENVdata='.$data.';';
-// 		$code .= Load::loadTEXT('-env/check.js');
-// 		$min = new Minify\JS($code);
-// 		$code = $min->minify();
-// 		$html .= $code;
-// 		$html .= '</script>';
-// 		View::head($html, true);	
-// 	});
-// },'ENV:tpl');

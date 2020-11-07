@@ -4,8 +4,7 @@
 	"autoload": {
 		"psr-4": { "infrajs\\env\\": "" }
 	},
-	"require":{
-		"matthiasmullie/minify":"~1",
+	"require":{		
 		"infrajs/mark":"~1",
 		"infrajs/view":"~1",
 		"infrajs/ans":"~1",
