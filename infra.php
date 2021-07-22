@@ -1,6 +1,6 @@
 <?php
 use infrajs\event\Event;
-use infrajs\view\View;
+//use infrajs\view\View;
 use infrajs\env\Env;
 use infrajs\load\Load;
 use infrajs\once\Once;

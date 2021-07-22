@@ -4,7 +4,7 @@ namespace infrajs\env;
 
 use infrajs\mark\BuildData;
 use infrajs\ans\Ans;
-use infrajs\view\View;
+//use infrajs\view\View;
 use infrajs\nostore\Nostore;
 //use infrajs\router\Router;
 use infrajs\sequence\Sequence;
@@ -36,7 +36,7 @@ class Env
 	public static function localName() 
 	{
 		$origname = Ans::GET('-env');
-		if (is_null($origname)) $origname = View::getCookie('-env');
+		if (is_null($origname) && isset($_COOKIE['-env'])) $origname = $_COOKIE['-env'];
 		return $origname;
 	}
 	public static function init() //Запускается только один раз
@@ -54,9 +54,13 @@ class Env
 		Env::$name = $name;
 		if (Env::$name) {
 			Env::$defined = true;
-			View::setCookie('-env', Env::$name);
+			header('Set-Cookie: -env='.Env::$name.'; Path=/; SameSite=Strict; Max-Age= '.(1000 * 3600 * 24 * 356));
+			//View::setCookie('-env', Env::$name);
 		} else {
-			View::setCookie('-env'); //Куки выставлять не обязательно
+			if (isset($_COOKIE['-env'])) {
+				header('Set-Cookie: -env; Path=/; SameSite=Strict; Max-Age=-1');
+			}
+			//View::setCookie('-env'); //Куки выставлять не обязательно
 		}
 		Env::$data = $data;
 	}

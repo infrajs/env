@@ -1,6 +1,6 @@
 <?php
 
-use infrajs\view\View;
+//use infrajs\view\View;
 use infrajs\ans\Ans;
 use infrajs\env\Env;
 use infrajs\config\Config;
@@ -21,7 +21,7 @@ $ans['data'] = Env::get();
 $ans['name'] = Env::getName();
 $ans['defined'] = Env::$defined;
 $ans['GET'] = Ans::GET('-env');
-$ans['cookie'] = View::getCOOKIE('-env');
+$ans['cookie'] = $_COOKIE['-env'];
 
 header('Content-type: application/javascript; charset=utf-8');
 echo 'export default ';

@@ -21,7 +21,7 @@ Env.check = env => {
 	
 	let getname = Env.fromGET()
 	if (getname) { //Если env установлен в адресе, то готово. Кэш такого адреса всегда по правильному окружению.
-		document.cookie = "-env=" + encodeURIComponent(getname) + "; path=/";
+		document.cookie = "-env=" + encodeURIComponent(getname) + "; path=/; SameSite=Strict ";
 		return
 	}
 	let cookiename = Env.fromCookie()
