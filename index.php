@@ -21,7 +21,11 @@ $ans['data'] = Env::get();
 $ans['name'] = Env::getName();
 $ans['defined'] = Env::$defined;
 $ans['GET'] = Ans::GET('-env');
-$ans['cookie'] = $_COOKIE['-env'];
+if (isset($_COOKIE['-env'])) {
+	$ans['cookie'] = $_COOKIE['-env'];
+} else {
+	$ans['cookie'] = false;
+}
 
 header('Content-type: application/javascript; charset=utf-8');
 echo 'export default ';
