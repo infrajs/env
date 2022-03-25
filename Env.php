@@ -47,7 +47,7 @@ class Env
 		$origname = Env::localName();
 
 		$res = BuildData::init(Env::$props, $origname);
-		
+
 		$data = $res['data'];
 		$name = $res['name'];
 
@@ -55,12 +55,10 @@ class Env
 		if (Env::$name) {
 			Env::$defined = true;
 			header('Set-Cookie: -env='.Env::$name.'; Path=/; SameSite=Strict; Max-Age= '.(1000 * 3600 * 24 * 356));
-			//View::setCookie('-env', Env::$name);
 		} else {
 			if (isset($_COOKIE['-env'])) {
-				header('Set-Cookie: -env; Path=/; SameSite=Strict; Max-Age=-1');
+				header('Set-Cookie: -env=; Path=/; SameSite=Strict; Max-Age=-1;');
 			}
-			//View::setCookie('-env'); //Куки выставлять не обязательно
 		}
 		Env::$data = $data;
 	}
