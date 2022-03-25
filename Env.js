@@ -20,7 +20,7 @@ Env.localName = () => {
 Env.refresh = async () => {
 	let name = Env.localName()
 	if (Check.name == name) return //Ничего не поменялось или запрос вернёт тот же результат из кэша
-	let json = (await import('/-env/?-env=' + name)).default || {}
+	let json = (await import('/-env/?-env=' + name + '&t='+ Date.now())).default || {}
 	if (Check.name == json.name) return //Ничего не поменялось
 	Check.data = json.data || {}
 	Check.name = json.name || ''
