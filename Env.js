@@ -18,17 +18,16 @@ Env.localName = () => {
 	return name
 }
 Env.refresh = async () => {
-	let name = Env.localName()
+	const name = Env.localName()
 	if (Check.name == name) return //Ничего не поменялось или запрос вернёт тот же результат из кэша
-	let json = (await import('/-env/?-env=' + name + '&t='+ Date.now())).default || {}
+	//const json = (await import('/-env/?-env=' + name + '&t='+ Date.now())).default || {}
+	const response = await fetch('/-env/?-env=' + name)
+	if (!response.ok) return
+	const json = await response.json();
 	if (Check.name == json.name) return //Ничего не поменялось
 	Check.data = json.data || {}
 	Check.name = json.name || ''
-	
 	await Env.emit('change')
 }
 
-//Env.after('change', () => DOM.puff('check'))
-
-window.Env = Env
 export { Env }

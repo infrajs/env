@@ -28,5 +28,5 @@ if (isset($_COOKIE['-env'])) {
 }
 
 header('Content-type: application/javascript; charset=utf-8');
-echo 'export default ';
+//echo 'export default ';
 echo json_encode($ans, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
