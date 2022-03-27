@@ -56,7 +56,7 @@ class Env
 
 		if (Env::$name) {
 			Env::$defined = true;
-			if ($name == $_COOKIE['-env']) return;
+			if (isset($_COOKIE['-env']) && $name == $_COOKIE['-env']) return;
 			header('Set-Cookie: -env='.Env::$name.'; Path=/; SameSite=Strict; Max-Age= '.(1000 * 3600 * 24 * 356));
 		} else {
 			if (isset($_COOKIE['-env'])) {
